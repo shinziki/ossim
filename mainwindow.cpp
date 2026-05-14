@@ -34,6 +34,13 @@ public:
         m_title = new QLabel(title);
         m_title->setFont(QFont("Courier New", 8));
         m_title->setStyleSheet("color:" + DIM_TEXT.name() + "; border:none;");
+
+        m_value = new QLabel("--");
+        m_value->setFont(QFont("Courier New", 18, QFont::Bold));
+        m_title->setStyleSheet("color:" + accent.name() + "; border:none;");
+
+        m_bar = new QProgressBar();
+        m_bar->setRange(0,100);
     }
 };
 
