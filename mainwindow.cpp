@@ -27,9 +27,9 @@ public:
             "background:#0d1526; border:1px solid %1; border-radius:4px;")
                           .arg(accent.name()));
 
-        auto *v1 = new QVBoxLayout(this);
-        v1->setContentsMargins(10,8,10,8);
-        v1->setSpacing(3);
+        auto *vl = new QVBoxLayout(this);
+        vl->setContentsMargins(10,8,10,8);
+        vl->setSpacing(3);
 
         m_title = new QLabel(title);
         m_title->setFont(QFont("Courier New", 8));
@@ -41,6 +41,20 @@ public:
 
         m_bar = new QProgressBar();
         m_bar->setRange(0,100);
+        m_bar->setValue(0);
+        m_bar->setFixedHeight(4);
+        m_bar->setTextVisible(false);
+        m_bar->setStyleSheet(
+            QString("QProgressBar{background:#0a1020; border:none; border-radius:2px;}"
+                    "QProgressBar::chunk{background:%1; border-radius:2px;}").arg(accent.name()));
+
+        vl->addWidget(m_title);
+        vl->addWidget(m_value);
+        vl->addWidget(m_bar);
+    }
+
+    void setValue(const QString &v, int pct=-1) {
+        m_value->setText(v);
     }
 };
 
