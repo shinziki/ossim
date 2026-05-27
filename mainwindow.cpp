@@ -69,4 +69,39 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("NexOS - OS Behavior Simulator");
     setMinimumSize(1200, 750);
     resize(1420, 860);
+    void setupUI();
+}
+
+void MainWindow::setupUI()
+{
+    auto *central = new QWidget(this);
+    setCentralWidget(central);
+    auto *root = new QVBoxLayout(central);
+    root->setContentsMargins(0,0,0,0);
+    root->setSpacing(0);
+
+    // Title bar
+    auto *bar = new QWidget();
+    bar->setFixedHeight(50);
+    bar->setStyleSheet("background: #060d1e; border-bottom: 1px solid #00e5ff25;");
+    auto *bl = new QHBoxLayout(bar);
+    bl->setContentsMargins(16,0,16,0);
+
+    auto mkLabel = [](const QString &t, const QColor &c, int pt, bool bold=false)
+    {
+        auto *l = new QLabel(t);
+        QFont f("Courier New", pt);
+        f.setBold(bold);
+        l->setFont(t);
+        l->setStyleSheet("color:" + c.name() + ";");
+        return l;
+    };
+
+    bl->addWidget(mkLabel("⬡ NexOS", NEON_CYAN, 14, true));
+    bl->addSpacing(12);
+}
+
+void MainWindow::updateClock()
+{
+
 }
