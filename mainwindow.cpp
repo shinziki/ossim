@@ -55,17 +55,18 @@ public:
 
     void setValue(const QString &v, int pct=-1) {
         m_value->setText(v);
+        if (pct>=0) m_bar->setValue(pct);
     }
+private:
+    QLabel *m_title, *m_value;
+    QProgressBar *m_bar;
+    QColor m_accent;
 };
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
+    setWindowTitle("NexOS - OS Behavior Simulator");
+    setMinimumSize(1200, 750);
+    resize(1420, 860);
 }
