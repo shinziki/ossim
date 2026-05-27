@@ -99,6 +99,11 @@ void MainWindow::setupUI()
 
     bl->addWidget(mkLabel("⬡ NexOS", NEON_CYAN, 14, true));
     bl->addSpacing(12);
+    bl->addWidget(mkLabel("OS Behavior Simulator v1.0-stage1", DIM_TEXT, 9));
+    bl->addStretch();
+    m_clockLabel = mkLabel("00:00:00", NEON_GREEN, 12, true);
+    bl->addWidget(m_clockLabel);
+    root->addWidget(bar);
 }
 
 void MainWindow::updateClock()
