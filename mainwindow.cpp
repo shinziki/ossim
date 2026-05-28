@@ -115,7 +115,13 @@ void MainWindow::setupUI()
     side->setFixedWidth(196);
     side->setStyleSheet("background: #080f1e; border-right: 1px solid #0d1e38;");
     auto *sl = new QVBoxLayout(side);
-    sl->setContentsMargins(10,16);
+    sl->setContentsMargins(10,16,10,16);
+    sl->setSpacing(8);
+
+    auto *sysLabel = new QLabel("SYSTEM METRICS");
+    sysLabel->setFont(QFont("Courier New", 8, QFont::Bold));
+    sysLabel->setStyleSheet("color: #4a6080; letter-spacing: 2px;");
+    sl->addWidget(sysLabel);
 }
 
 void MainWindow::updateClock()
