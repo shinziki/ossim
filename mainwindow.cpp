@@ -104,6 +104,18 @@ void MainWindow::setupUI()
     m_clockLabel = mkLabel("00:00:00", NEON_GREEN, 12, true);
     bl->addWidget(m_clockLabel);
     root->addWidget(bar);
+
+    // Body splitter
+    auto *splitter = new QSplitter(Qt::Horizontal);
+    splitter->setHandleWidth(1);
+    splitter->setStyleSheet("QSplitter::handle{background:#00e5ff15;}");
+
+    // Side panel
+    auto *side = new QWidget();
+    side->setFixedWidth(196);
+    side->setStyleSheet("background: #080f1e; border-right: 1px solid #0d1e38;");
+    auto *sl = new QVBoxLayout(side);
+    sl->setContentsMargins(10,16);
 }
 
 void MainWindow::updateClock()
