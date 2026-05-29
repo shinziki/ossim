@@ -122,6 +122,13 @@ void MainWindow::setupUI()
     sysLabel->setFont(QFont("Courier New", 8, QFont::Bold));
     sysLabel->setStyleSheet("color: #4a6080; letter-spacing: 2px;");
     sl->addWidget(sysLabel);
+    sl->addSpacing(4);
+
+    auto *cpuCard = new MetricCard("CPU LOAD", NEON_CYAN);
+    auto *memCard = new MetricCard("MEMORY", NEON_GREEN);
+    auto *procCard = new MetricCard("PROCESSES", QColor("#ff9f0a"));
+    auto *ioCard = new MetricCard("I/O WAIT", NEON_RED);
+    sl->addWidget(cpuCard);
 }
 
 void MainWindow::updateClock()
