@@ -129,6 +129,16 @@ void MainWindow::setupUI()
     auto *procCard = new MetricCard("PROCESSES", QColor("#ff9f0a"));
     auto *ioCard = new MetricCard("I/O WAIT", NEON_RED);
     sl->addWidget(cpuCard);
+    sl->addWidget(memCard);
+    sl->addWidget(procCard);
+    sl->addWidget(ioCard);
+    sl->addStretch();
+
+    auto *verLabel = new QLabel("BUILD 2025.1\nSTAGE 1 OF 4");
+    verLabel->setFont(QFont("Courier New", 8));
+    verLabel->setStyleSheet("color:#2a3a55;");
+    verLabel->setAlignment(Qt::AlignCenter);
+    sl->addWidget(verLabel);
 }
 
 void MainWindow::updateClock()
