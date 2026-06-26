@@ -170,8 +170,29 @@ void MainWindow::setupUI()
     };
 
     m_tabs->addTab(placeholder("MEMORY ALLOCATOR"), "▦  MEMORY");
-    m_tabs->addTab(placeholder("CPU CORE ASSIGNMENT", "◈  CPU CORES"));
-    m_tabs->addTab(placeholder("DEADLOCK SIMULATOR"))
+    m_tabs->addTab(placeholder("CPU CORE ASSIGNMENT"), "◈  CPU CORES");
+    m_tabs->addTab(placeholder("DEADLOCK SIMULATOR"), "☠  DEADLOCK");
+    m_tabs->addTab(placeholder("FILE SYSTEM BLOCKS"),  "⊞  FILE SYSTEM");
+
+    splitter->addWidget(side);
+    splitter->addWidget(m_tabs);
+    splitter->setStretchFactor(1, 1);
+    root->addWidget(splitter, 1);
+
+    // Status Bar
+    auto *sb = statusBar();
+    sb->setStyleSheet("background:#060d1e; color:#4a6080; "
+                      "font-family:'Courier New'; font-size:9px; "
+                      "border-top:1px solid #00e5ff15;");
+    m_statusLabel  = new QLabel("SYSTEM NOMINAL  |  ALL SUBSYSTEMS ONLINE");
+    m_uptimeLabel  = new QLabel("UPTIME: 00:00:00");
+    m_statusLabel->setStyleSheet("color:#39ff14;");
+    m_uptimeLabel->setStyleSheet("color:#4a6080;");
+    sb->addWidget(m_statusLabel);
+    sb->addPermanentWidget(m_uptimeLabel);
+
+    // Timers
+    m_clockTimer = new QTimer(this);
 }
 
 void MainWindow::updateClock()
