@@ -139,6 +139,31 @@ void MainWindow::setupUI()
     verLabel->setStyleSheet("color:#2a3a55;");
     verLabel->setAlignment(Qt::AlignCenter);
     sl->addWidget(verLabel);
+
+    // Tab widget
+    m_tabs = new QTabWidget();
+    m_tabs->setStyleSheet(R"(
+        QTabWidget::pane { border:none; background:#050b18; }
+        QTabBar::tab {
+            background:#0d1526; color:#4a6080;
+            font-family:'Courier New'; font-size:10px; font-weight:bold;
+            padding:10px 20px; border:none;
+            border-top:2px solid transparent; margin-right:2px;
+        }
+        QTabBar::tab:selected { background:#0a1a35; color:#00e5ff; border-top:2px solid #00e5ff; }
+        QTabBar::tab:hover:!selected { color:#7fa8c9; background:#0c1828; }
+    )");
+
+    m_scheduler = new SchedulerWidget();
+    m_tabs->addTab(m_scheduler, "⚙ PROCESS SCHEDULER");
+
+    auto placeholder = [&](const QString &name) -> QWidget* {
+        auto *w = new QWidget();
+        w->setStyleSheet("background: #050b18");
+        auto *vl = new QVBoxLayout(w);
+        auto *lb = new QLabel(name + "\n\nCOMING IN NEXT STAGE");
+        lb->setFont(QFont("Courier New"));
+    }
 }
 
 void MainWindow::updateClock()
