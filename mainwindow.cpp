@@ -162,8 +162,16 @@ void MainWindow::setupUI()
         w->setStyleSheet("background: #050b18");
         auto *vl = new QVBoxLayout(w);
         auto *lb = new QLabel(name + "\n\nCOMING IN NEXT STAGE");
-        lb->setFont(QFont("Courier New"));
-    }
+        lb->setFont(QFont("Courier New", 14));
+        lb->setStyleSheet("color: #2a3a55;");
+        lb->setAlignment(Qt::AlignCenter);
+        vl->addWidget(lb);
+        return w;
+    };
+
+    m_tabs->addTab(placeholder("MEMORY ALLOCATOR"), "▦  MEMORY");
+    m_tabs->addTab(placeholder("CPU CORE ASSIGNMENT", "◈  CPU CORES"));
+    m_tabs->addTab(placeholder("DEADLOCK SIMULATOR"))
 }
 
 void MainWindow::updateClock()
