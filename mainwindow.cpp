@@ -193,6 +193,12 @@ void MainWindow::setupUI()
 
     // Timers
     m_clockTimer = new QTimer(this);
+    connect(m_clockTimer, &QTimer::timeout, this, &MainWindow::updateClock);
+    m_clockTimer->start(1000);
+    updateClock();
+
+    m_statusTimer = new QTimer(this);
+    connect(m_statusTimer, &QTimer::timeout, this)
 }
 
 void MainWindow::updateClock()
