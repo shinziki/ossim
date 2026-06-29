@@ -213,11 +213,15 @@ void MainWindow::setupUI()
         m_uptimeLabel->setText(
             QString("UPTIME: %1:%2:%3")
                 .arg(h,2,10,QLatin1Char('0'))
-                .arg(m2,2,10))
+                .arg(m2,2,10, QLatin1Char('0'))
+                .arg(s,2,10,QLatin1Char('0')));
     });
+    m_statusLabel->start(1000);
 }
 
 void MainWindow::updateClock()
 {
-
+    m_clockLabel->setText(QDateTime::currentDateTime().toString("HH:mm:ss"));
 }
+
+#include "mainwindow.moc"

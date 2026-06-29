@@ -1,10 +1,14 @@
-#ifndef PROCESSSCHEDULER_H
-#define PROCESSSCHEDULER_H
+#pragma once
+#include <QString>
+#include <QColor>
+#include <QVector>
+#include <QList>
 
-class processscheduler
-{
-public:
-    processscheduler();
+// Process state machine
+enum class ProcState {
+    NEW,
+    READY,
+    RUNNING,
+    WAITING,
+    TERMINATED
 };
-
-#endif // PROCESSSCHEDULER_H
