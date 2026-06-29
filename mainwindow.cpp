@@ -209,6 +209,11 @@ void MainWindow::setupUI()
         procCard->setValue(QString::number(proc), proc*100/64);
         ioCard->setValue(QString("%1%").arg(io), io);
         m_fakeUptime++;
+        int h=m_fakeUptime/3600, m2=(m_fakeUptime%3600)/60, s=m_fakeUptime%60;
+        m_uptimeLabel->setText(
+            QString("UPTIME: %1:%2:%3")
+                .arg(h,2,10,QLatin1Char('0'))
+                .arg(m2,2,10))
     });
 }
 
