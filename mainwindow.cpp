@@ -198,7 +198,18 @@ void MainWindow::setupUI()
     updateClock();
 
     m_statusTimer = new QTimer(this);
-    connect(m_statusTimer, &QTimer::timeout, this)
+    connect(m_statusTimer, &QTimer::timeout, this, [=]() {
+        static int cpu=35, mem=48, proc=12, io=8;
+        cpu = qBound(5, cpu + QRandomGenerator::global()->bounded(-8,9), 95);
+        mem = qBound(20, mem + QRandomGenerator::global()->bounded(-3,4), 90);
+        proc = qBound(3, proc + QRandomGenerator::global()->bounded(-2,3), 64);
+        io = qBound(0, io + QRandomGenerator::global()->bounded(-5,6), 40);
+        cpuCard->setValue(QString("%1%").arg(cpu), cpu);
+        memCard->setValue(QString("%1%").arg(mem), mem);
+        procCard->setValue(QString::number(proc), proc*100/64);
+        ioCard->setValue(QString("%1%").arg(io), io);
+        m_fakeUptime++;
+    });
 }
 
 void MainWindow::updateClock()
