@@ -45,4 +45,21 @@ struct Process {
     int       priority;        // lower = higher priority
     int       waitingTime;     // accumulated waiting ticks
     int       turnaroundTime;  // total time from arrival to finish
+    int       startTick;
+    int       finishTick;
+    ProcState state;
+    QColor    color;
+
+    bool operator==(const Process &o) const {
+        return pid == o.pid;
+    }
+};
+
+// Gantt bar Entry
+struct GanttEntry {
+    int pid;
+    int startTick;
+    int endTick;
+    QColor color;
+    Qstring name;
 };
