@@ -63,3 +63,23 @@ struct GanttEntry {
     QColor color;
     Qstring name;
 };
+
+// Scheduling algorithms
+enum class Algorithm {
+    FCFS,
+    SJF,
+    ROUND_ROBIN,
+    PRIORITY
+};
+
+// Scheduler engine
+class ProcessScheduler
+{
+public:
+    ProcessScheduler() = default;
+
+    void setAlgorithm(Algorithm alg) { m_algorithm = alg; }
+    void setQuantum(int q) { m_quantum = q; }
+    void addProcess(const Process &p) { m_processes.append(p); }
+    void clearProcesses()  { m_processes.clear(); m_gantt.clear(); }
+};
