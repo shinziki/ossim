@@ -82,4 +82,20 @@ public:
     void setQuantum(int q) { m_quantum = q; }
     void addProcess(const Process &p) { m_processes.append(p); }
     void clearProcesses()  { m_processes.clear(); m_gantt.clear(); }
+
+    const QList<Process>    &processes()     const { return m_processes; }
+    const QList<GanttEntry> &ganttChart()    const { return m_gantt; }
+    int                      totalTicks()    const { return m_totalTicks; }
+
+    void reset();
+    void run();          // compute full schedule, fill gantt
+
+    // Step-based simulation (one tick at a time for animation)
+    void  resetSim();
+    bool  stepOneTick(); // returns false when simulation is done
+    int   currentTick()  const { return m_currentTick; }
+    int   runningPid()   const { return m_runningPid; }
+
+    // Stats (populated after run())
+    double avgWaitingTime()     const;
 };
