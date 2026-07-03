@@ -61,7 +61,7 @@ struct GanttEntry {
     int startTick;
     int endTick;
     QColor color;
-    Qstring name;
+    QString name;
 };
 
 // Scheduling algorithms
@@ -98,4 +98,18 @@ public:
 
     // Stats (populated after run())
     double avgWaitingTime()     const;
+    double avgTurnaroundTime() const;
+    double cpuUtilization() const;
+
+private:
+    QList<Process> m_processes;
+    QList<GanttEntry> m_gantt;
+    Algorithm m_algorithm = Algorithm::ROUND_ROBIN;
+    int m_quantum = 2;
+    int m_totalTicks = 0;
+
+    // step-sim state
+    int m_currentTick = 0;
+    int m_runningPid = -1;
+    int m_quantumLeft = 0;
 };
