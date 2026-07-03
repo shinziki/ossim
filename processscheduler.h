@@ -112,4 +112,10 @@ private:
     int m_currentTick = 0;
     int m_runningPid = -1;
     int m_quantumLeft = 0;
+    QList<int> m_readyQueue;
+
+    void runFCFS();
+    void runSJF();
+    void runRR();
+    void runPriority();
 };
