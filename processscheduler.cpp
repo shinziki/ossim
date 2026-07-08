@@ -74,4 +74,109 @@ void ProcessScheduler::runFCFS() {
 void ProcessScheduler::runSJF() {
     QList<Process> remaining = m_processes;
     for (auto &p : remaining) p.state = ProcState::READY;
+
+    int tick = 0;
+    while (!remaining.isEmpty()) {
+        // Find arrived and not finished
+        QList<Process*> available;
+        for (auto &p : remaining)
+            if (p.arrivalTime <= tick) available.append(&p);
+
+        if (available.isEmpty()) { tick++; continue; }
+
+        // Sort by burst time
+        std::sort(available.begin(), avaiable.end(), [](const Process *a, const Process *b){ return a->burstTime < b->burstTime; });
+
+        Process *chosen = available.first();
+        chosen->startTick = tick;
+        chosen->waitingTime = tick - chosen->arrivalTime;
+
+        GanttEntry g;
+        g.pid       = chosen->pid;
+        g.name      = chosen->name;
+        g.color     = chosen->color;
+        g.startTick = tick;
+        g.endTick   = tick + chosen->burstTime;
+        m_gantt.append(g);
+
+        tick                  += chosen->burstTime;
+        chosen->finishTick     = tick;
+        chosen->turnaroundTime = tick - chosen->arrivalTime;
+        chosen->state          = ProcState::TERMINATED;
+
+        // write back and remove
+        for (auto &orig : m_processes)
+            if (orig.pid == chosen->pid) { orig = *chosen; break; }
+
+        remaining.removeIf([&](const Process &p){ return p.pid == chosen->pid; });
+    }
+    m_totalTicks = tick;
+}
+
+// Round Robin
+void ProcessScheduler::runRR() {
+    QList<Process> procs = m_processes;
+    QList<int> queue;
+    int tick = 0;
+
+    // sort by arrival
+    std::sort(procs.begin(), procs.end(), [](const Process &a, const Process &b){ return a.arrivalTime < b.arrivalTime; });
+
+    // seed queue with first arriavls at tick 0
+    for (auto &p : procs)
+        if (p.arrivalTime == 0) queue.append(p.pid);
+
+    auto anyRemaining = [&]() {
+        return std::any_of(procs.begin(), procs.end(), [](const Process &p){ return p.remainingTime > 0; });
+    };
+
+    while (anyRemaining()) {
+        if (queue.isEmpty()) {
+            // advance to next arrival
+            int nextArr = INT_MAX;
+            for (auto &p : procs)
+                if (p.remainingTime > 0) nextArr = qMin(nextArr, p.arrivalTime);
+            tick = nextArr;
+            for (auto &p : procs)
+                if (p.arrivalTime <= tick && p.remainingTime > 0 && !queue.contains(p.pid))
+                    queue.append(p.pid);
+            continue;
+        }
+
+        int pid      = queue.takeFirst();
+        Process *cur = findByPid(procs, pid);
+        if (!cur || cur->remainingTime <= 0) continue;
+
+        if (cur->startTick < 0) cur->startTick = tick;
+
+        int slice = qMin(m_quantum, cur->remainingTime);
+        GanttEntry g;
+        g.pid       = cur->pid;
+        g.name      = cur->name;
+        g.color     = cur->color;
+        g.startTick = tick;
+        g.endTick   = tick + slice;
+        m_gantt.append(g);
+
+        cur->remainingTime -= slice;
+        int oldTick = tick;
+        tick += slice;
+
+        // Enqueue processes that arrived during this slice
+        for (auto &p : procs)
+            if (p.arrivalTime > oldTick && p.arrivalTime <= tick
+                && p.remainingTime > 0 && !queue.contains(p.pid))
+                queue.append(p.pid);
+
+        if (cur->remainingTime > 0) {
+            queue.append(cur->pid);
+        } else {
+            cur->finishTick     = tick;
+            cur->turnaroundTime = tick - cur->arrivalTime;
+            cur->waitingTime    = cur->turnaroundTime - cur->burstTime;
+            cur->state          = ProcState::TERMINATED;
+            for (auto &orig : m_processes)
+                if (orig.pid == cur->pid) { orig = *cur; break; }
+        }
+    }
 }
