@@ -179,4 +179,59 @@ void ProcessScheduler::runRR() {
                 if (orig.pid == cur->pid) { orig = *cur; break; }
         }
     }
+    m_totalTicks = tick;
+}
+
+// Priority
+void ProcessScheduler::runPriority() {
+    QList<Process> remaining = m_processes;
+    int tick = 0;
+
+    auto anyRemaining = [&]() {
+        return std::any_of(remaining.begin(), remaining.end(), [](const Process &p){ return p.remainingTime > 0; });;
+
+    };
+
+    while (anyRemaining()) {
+        QList<Process*> available;
+        for (auto &p : remaining)
+            if (p.arrivalTime <= tick && p.remainingTime > 0) available.append(&p);
+
+        if (available.isEmpty()) { tick++; continue; }
+
+        std::sort(available.begin(), available.end(),
+                  [](const Process *a, const Process *b){ return a->priority < b->priority; });
+
+        Process *chosen = available.first();
+        if (chosen->startTick < 0) chosen->startTick = tick;
+        chosen->waitingTime = tick - chosen->arrivalTime;
+
+        GanttEntry g;
+        g.pid       = chosen->pid;
+        g.name      = chosen->name;
+        g.color     = chosen->color;
+        g.startTick = tick;
+        g.endTick   = tick + chosen->burstTime;
+        m_gantt.append(g);
+
+        tick                  += chosen->burstTime;
+        chosen->finishTick     = tick;
+        chosen->turnaroundTime = tick - chosen->arrivalTime;
+        chosen->remainingTime  = 0;
+        chosen->state          = ProcState::TERMINATED;
+
+        for (auto &orig : m_processes)
+            if (orig.pid == chosen->pid) { orig = *chosen; break; }
+
+        remaining.removeIf([&](const Process &p){ return p.pid == chosen->pid; });
+    }
+    m_totalTicks = tick;
+}
+
+// Stats
+double ProcessScheduler::avgWaitingTime() const {
+    if (m_processes.isEmpty()) return 0;
+    double sum = 0;
+    for (const auto &p : m_processes) sum += p.waitingTime;
+    return sum / m_processes.size();
 }
