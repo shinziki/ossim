@@ -235,3 +235,23 @@ double ProcessScheduler::avgWaitingTime() const {
     for (const auto &p : m_processes) sum += p.waitingTime;
     return sum / m_processes.size();
 }
+
+double ProcessScheduler::avgTurnAroundTime() const {
+    if (m_processes.isEmpty()) return 0;
+    double sum = 0;
+    for (const auto &p : m_processes) sum += p.turnaroundTime;
+    return sum / m_processes.size();
+}
+
+double ProcessScheduler::cpuUtilization() const {
+    if (m_totalTicks == 0) return 0;
+    int busy = 0;
+    for (const auto &p : m_gantt) busy += (g.endTick - g.startTick);
+    return (double)busy / m_totalTicks * 100.0;
+}
+
+// Step-based simulation
+void ProcessScheduler::resetSim() {
+    reset();
+    m_currentTick = 0;
+}
