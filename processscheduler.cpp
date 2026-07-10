@@ -254,4 +254,36 @@ double ProcessScheduler::cpuUtilization() const {
 void ProcessScheduler::resetSim() {
     reset();
     m_currentTick = 0;
+    m_runningPid = -1;
+    m_quantumLeft = 0;
+    m_readyQueue.clear();
+}
+
+bool ProcessScheduler::stepOneTick() {
+    if (m_gantt.isEmpty()) run();
+
+    m_runningPid = -1;
+    for (const auto &g : m_gantt) {
+        if (m_currentTick >= g.startTick && m_currentTick < g.endTick) {
+            m_runningPid = g.pid;
+            break;
+        }
+    }
+
+    for (auto &p : m_processes) {
+        if (p.state == ProcState::TERMINATED) continue;
+        if (p.arrivalTime > m_currentTick) {
+            p.state = ProcState::NEW;
+        } else if (p.pid == m_runningPid) {
+            p.state = ProcState::RUNNING;
+            p.remainingTime = qMax(0, p.burstTime - (m_currentTick - p.startTick + 1));
+        } else {
+            p.state = ProcState::READY;
+        }
+        if (p.finishTick > 0 && m_currentTick >= p.finishTick)
+            p.state = ProcState::TERMINATED;
+    }
+
+    m_currentTick++;
+    return m_currentTick <= m_totalTicks;
 }

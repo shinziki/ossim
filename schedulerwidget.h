@@ -1,10 +1,10 @@
-#ifndef SCHEDULERWIDGET_H
-#define SCHEDULERWIDGET_H
-
-class schedulerwidget
-{
-public:
-    schedulerwidget();
-};
-
-#endif // SCHEDULERWIDGET_H
+#pragma once
+#include <QWidget>
+#include <QTimer>
+#include <QLabel>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QPushButton>
+#include <QTableWidget>
+#include <QScrollArea>
+#include "processscheduler.h"
