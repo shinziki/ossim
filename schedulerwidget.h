@@ -52,4 +52,30 @@ public:
 
 private slots:
     void onAddProcess();
+    void onRemoveProcess();
+    void onRunSimulation();
+    void onResetSimulation();
+    void onAnimationTick();
+    void onAlgorithmChanged(int index);
+    void onSpeedChanged(int val);
+
+private:
+    void setupUI();
+    void setupControlPanel();
+    void setupMainArea();
+    void buildDefaultProcesses();
+    void updateStats();
+    void applyGlow(QWidget *w, const QColor &color);
+
+    // Engine
+    ProcessScheduler m_engine;
+
+    // Controls
+    QComboBox *m_algorithmBox = nullptr;
+    QSpinBox *m_quantumSpin = nullptr;
+    QSpinBox *m_speedSpin = nullptr;
+    QPushButton *m_runBtn = nullptr;
+    QPushButton *m_resetBtn = nullptr;
+    QPushButton *m_addBtn = nullptr;
+    QPushButton *m_removeBtn = nullptr;
 };
