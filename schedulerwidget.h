@@ -78,4 +78,16 @@ private:
     QPushButton *m_resetBtn = nullptr;
     QPushButton *m_addBtn = nullptr;
     QPushButton *m_removeBtn = nullptr;
+    QSpinBox *m_burstSpin = nullptr;
+    QSpinBox *m_arrivalSpin = nullptr;
+    QSpinBox *m_prioritySpin = nullptr;
+
+    // Display
+    GanttWidget *m_ganttWidget = nullptr;
+    ProcessTableWidget *m_procTable = nullptr;
+    QScrollArea *m_ganttScroll = nullptr;
+    QLabel *m_statAvgWait = nullptr;
+    QLabel *m_statAvgTurn = nullptr;
+    QLabel *m_statCpuUtil = nullptr;
+    QLabel *m_statTicks = nullptr;
 };
