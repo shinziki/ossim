@@ -90,4 +90,13 @@ private:
     QLabel *m_statAvgTurn = nullptr;
     QLabel *m_statCpuUtil = nullptr;
     QLabel *m_statTicks = nullptr;
+    QLabel *m_tickLabel = nullptr;
+
+    // Animation
+    QTimer *m_animTimer = nullptr;
+    bool m_running = false;
+    int m_nextPid = 1;
+
+    // Colour palette for processes
+    static const QVector<QColor> PROC_COLORS;
 };
