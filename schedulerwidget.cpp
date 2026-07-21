@@ -56,6 +56,27 @@ void GanttWidget::resizeEvent(QResizeEvent *event) {
 void GanttWidget::paintEvent(QPaintEvent *) {
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
+
+    // Background
+    p.fillRect(rect(), QColor("#050b18"));
+
+    if (m_entries.isEmpty() || m_totalTicks == 0) {
+        p.setPen(QColor("#2a3a55"));
+        p.setFont(QFont("Courier New", 11));
+        p.drawText(rect(), Qt::AlignCenter, "No schedule data - press RUN");
+        return;
+    }
+
+    const int W = width();
+    const double pxPerTick = qMax(18.0, (double)(W - LEFT_MARGIN - RIGHT_MARGIN) / m_totalTicks);
+
+    // Collect unique process rows
+    QMap<int, QPair<QString, QColor>> pidInfo;
+    for (const auto &g : m_entries) pidInfo[g.pid] = {g.name, g.color};
+
+    QList<int> pids = pidInfo.keys();
+    int rowCount = pids.size();
+    int totalH = TOP_MARGIN + TICK_LABEL_H + rowCount * (m_rowH + 6) + 20;
 }
 
 schedulerwidget::schedulerwidget() {}
