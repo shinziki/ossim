@@ -77,6 +77,85 @@ void GanttWidget::paintEvent(QPaintEvent *) {
     QList<int> pids = pidInfo.keys();
     int rowCount = pids.size();
     int totalH = TOP_MARGIN + TICK_LABEL_H + rowCount * (m_rowH + 6) + 20;
+    setMinimumHeight(totalH);
+
+    // Draw tick grid
+    p.setPen(QPen(QColor("#0d1e38"), 1));
+    p.setFont(QFont("Courier New", 7));
+    int step = qMax(1, (int)(30.0 / pxPerTick));
+    for (int t = 0; t <= m_totalTicks; t += step) {
+        int x = LEFT_MARGIN + (int)(t * pxPerTick);
+        p.setPen(QPen(QColor("#0d2040"), 1, Qt::DotLine));
+        p.drawLine(x, TOP_MARGIN + TICK_LABEL_H, x, TOP_MARGIN + TICK_LABEL_H + rowCount * (m_rowH + 6));
+        p.setPen(QColor("#3a5070"));
+        p.drawText(x - 8, TOP_MARGIN + TICK_LABEL_H - 2, 24, 14, Qt::AlignCenter, QString::number(t));
+    }
+
+    // Draw Gantt bars
+    int rowY = TOP_MARGIN + TICK_LABEL_H;
+    for (int pid : pids) {
+        // Row label
+        p.setFont(QFont("Courier New", 9, QFont::Bold));
+        p.setPen(pidInfo[pid].second);
+        p.drawText(0, rowY, LEFT_MARGIN - 6, m_rowH, Qt::AlignRight | Qt::AlignVCenter, pidInfo[pid].first);
+
+        // Bars for this pid
+        for (const auto &g : m_entries) {
+            if (g.pid != pid) continue;
+
+            int x1 = LEFT_MARGIN + (int)(g.startTick * pxPerTick);
+            int x2 = LEFT_MARGIN + (int)(g.endTick   * pxPerTick);
+            int barW = x2 - x1 - 2;
+            if (barW < 1) barW = 1;
+
+            // Determine how much of this bar has been "executed"
+            double filled = 0.0;
+            if (m_currentTick >= g.endTick) {
+                filled = 1.0;
+            } else if (m_currentTick > g.startTick) {
+                filled = (double)(m_currentTick - g.startTick) /
+                         (g.endTick - g.startTick);
+            }
+
+            QRect barRect(x1 + 1, rowY + 4, barW, m_rowH - 8);
+
+            // Dark base
+            p.fillRect(barRect, QColor(g.color.red(),
+                                       g.color.green(),
+                                       g.color.blue(), 30));
+
+            // Filled portion
+            if (filled > 0.0) {
+                QRect filled_rect(barRect.x(), barRect.y(),
+                                  (int)(barRect.width() * filled),
+                                  barRect.height());
+                QLinearGradient grad(filled_rect.topLeft(), filled_rect.topRight());
+                grad.setColorAt(0, QColor(g.color.red(),
+                                          g.color.green(),
+                                          g.color.blue(), 200));
+                grad.setColorAt(1, g.color);
+                p.fillRect(filled_rect, grad);
+
+                // Glow line at right edge
+                if (filled < 1.0) {
+                    int ex = filled_rect.right();
+                    p.setPen(QPen(g.color, 2));
+                    p.drawLine(ex, barRect.top(), ex, barRect.bottom());
+                }
+            }
+
+            // Border
+            p.setPen(QPen(g.color, 1));
+            p.drawRect(barRect);
+
+            // Label inside bar
+            if (barW > 30) {
+                p.setPen(Qt::white);
+                p.setFont(QFont("Courier New", 8));
+                p.drawText(barRect, Qt::AlignCenter, g.name);
+            }
+        }
+    }
 }
 
 schedulerwidget::schedulerwidget() {}
