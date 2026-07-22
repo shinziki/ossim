@@ -155,7 +155,28 @@ void GanttWidget::paintEvent(QPaintEvent *) {
                 p.drawText(barRect, Qt::AlignCenter, g.name);
             }
         }
+        rowY += m_rowH + 6;
     }
+
+    // Current tick cursor
+    if (m_currentTick > 0 && m_currentTick <= m_totalTicks) {
+        int cx = LEFT_MARGIN + (int)(m_currentTick * pxPerTick);
+        p.setPen(QPen(QColor("#ffffff60"), 1, Qt::DashLine));
+        p.drawLine(cx, TOP_MARGIN, cx, TOP_MARGIN + TICK_LABEL_H + rowCount * (m_rowH + 6));
+
+        // Tick label above cursor
+        p.setFont(QFont("Courier New", 8, QFont::Bold));
+        p.setPen(Qt::white);
+        QRect tickRect(cx - 16, 4, 32, 16);
+        p.fillRect(tickRect, QColor("#00e5ff"));
+        p.setPen(QColor("#050b18"));
+        p.drawText(tickRect, Qt::AlignCenter, QString::number(m_currentTick));
+    }
+}
+
+// ProcessTableWidget
+ProcessTableWidget::ProcessTableWidget(QWidget *parent) : QTableWidget(parent) {
+    QStringList headers = {"PID", "Name", "Arrival", "Burst", "Remaining", "Priority", "State", "Wait"}
 }
 
 schedulerwidget::schedulerwidget() {}
