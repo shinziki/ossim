@@ -274,4 +274,32 @@ static QLabel* sectionTitle(const QString &text) {
 
 static QFrame* hLine() {
     auto *f = new QFrame();
+    f->setFrameShape(QFrame::HLine);
+    f->setStyleSheet("border: none; border-top: 1px solid #0d1e38");
+    f->setFixedHeight(1);
+    return f;
+}
+
+static QPushButton* neonButton(const QString &text, const QColor &color) {
+    auto *btn = new QPushButton(text);
+    btn->setFont(QFont("Courier New", 9, QFont::Bold));
+    btn->setCursor(Qt::PointingHandCursor);
+    btn->setFixedHeight(32);
+    btn->setStyleSheet(
+        QString("QPushButton {"
+                "  background: transparent;"
+                "  color: %1;"
+                "  border: 1px solid %1;"
+                "  border-radius: 3px;"
+                "  padding: 0 12px;"
+                "}"
+                "QPushButton:hover {"
+                "  background: %2;"
+                "  color: #050b18;"
+                "}"
+                "QPushButton:pressed { opacity: 0.7; }"
+                "QPushButton:disabled { color: #1a2a40; border-color: #1a2a40; }")
+            .arg(color.name())
+            .arg(color.name()));
+    return btn;
 }
