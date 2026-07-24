@@ -176,7 +176,16 @@ void GanttWidget::paintEvent(QPaintEvent *) {
 
 // ProcessTableWidget
 ProcessTableWidget::ProcessTableWidget(QWidget *parent) : QTableWidget(parent) {
-    QStringList headers = {"PID", "Name", "Arrival", "Burst", "Remaining", "Priority", "State", "Wait"}
+    QStringList headers = {"PID", "Name", "Arrival", "Burst", "Remaining", "Priority", "State", "Wait", "Turnaround"};
+    setColumnCount(headers.size());
+    setHorizontalHeaderLabels(headers);
+    setEditTriggers(QAbstractItemView::NoEditTriggers);
+    setSelectionBehavior(QAbstractItemView::SelectRows);
+    setAlternatingRowColors(false);
+    verticalHeader()->setVisible(false);
+    horizontalHeader()->setStretchLastSection(true);
+    horizontalHeader()->setSectionResizeMode(QHeaderView::RezieToContents);
+    setShowGrid(false);
 }
 
 schedulerwidget::schedulerwidget() {}
