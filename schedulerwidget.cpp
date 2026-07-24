@@ -186,6 +186,92 @@ ProcessTableWidget::ProcessTableWidget(QWidget *parent) : QTableWidget(parent) {
     horizontalHeader()->setStretchLastSection(true);
     horizontalHeader()->setSectionResizeMode(QHeaderView::RezieToContents);
     setShowGrid(false);
+    setStyleSheet(R"(
+        QTableWidget {
+            background: #050b18;
+            color: #7fa8c9;
+            font-family: 'Courier New';
+            font-size: 10px;
+            border: none;
+            gridline-color: transparent;
+        }
+        QTableWidget::item {
+            padding: 4px 8px;
+            border-bottom: 1px solid #0d1e38;
+        }
+        QTableWidget::item:selected {
+            background: #0d2040;
+            color: #00e5ff;
+        }
+        QHeaderView::section {
+            background: #080f1e;
+            color: #4a6080;
+            font-family: 'Courier New';
+            font-size: 9px;
+            font-weight: bold;
+            border: none;
+            border-bottom: 1px solid #00e5ff30;
+            padding: 6px 8px;
+        }
+        QScrollBar:vertical, QScrollBar:horizontal {
+            background: #080f1e;
+            width: 6px; height: 6px;
+        }
+        QScrollBar::handle { background: #1a3050; border-radius: 3px; }
+    )");
 }
 
-schedulerwidget::schedulerwidget() {}
+
+void ProcessTableWidget::refreshProcess(const QList<Process> &procs) {
+    setRowCount(procs.size());
+    for (int i = 0; i < procs.size(); ++i) {
+        const Process &p = procs[i];
+        QColor sc = stateColor(p.state);
+
+        auto cell = [&](int col, const QString &text, const QColor &fg = QColor("#7fa8c9")) {
+            auto *item = new QTableWidgetItem(text);
+            item->setForeground(fg);
+            item->setTextAlignment(Qt::AlignCenter);
+            setItem(i, col, item);
+        };
+
+        // Colour dot in PID column
+        auto *pidItem = new QTableWidgetItem(
+            QString("● P%1").arg(p.pid));
+        pidItem->setForeground(p.color);
+        pidItem->setTextAlignment(Qt::AlignCenter);
+        pidItem->setFont(QFont("Courier New", 10, QFont::Bold));
+        setItem(i, 0, pidItem);
+
+        cell(1, p.name);
+        cell(2, QString::number(p.arrivalTime));
+        cell(3, QString::number(p.burstTime));
+        cell(4, p.state == ProcState::TERMINATED ? "-" : QString::number(p.remainingTime));
+        cell(5, QString::number(p.priority));
+        cell(6, stateString(p.state), sc);
+        cell(7, p.waitingTime    >= 0 ? QString::number(p.waitingTime)    : "-");
+        cell(8, p.turnaroundTime >= 0 ? QString::number(p.turnaroundTime) : "-");
+
+        // Row background based on state
+        for (int c = 0; c < columnCount(); ++c) {
+            if (auto *it = item(i, c)) {
+                QColor bg("#050b18");
+                if (p.state == ProcState::RUNNING)    bg = QColor("#001a08");
+                if (p.state == ProcState::TERMINATED) bg = QColor("#0a0508");
+                it->setBackground(bg);
+            }
+        }
+    }
+}
+
+// SchedulerWidget
+static QLabel* sectionTitle(const QString &text) {
+    auto *l = new QLabel(text);
+    l->setFont(QFont("Courier New", 8, QFont::Bold));
+    l->setStyleSheet("color: #4a6080; letter-spacing: 2px;");
+    return l;
+}
+
+static QFrame* hLine() {
+    auto *f = new QFrame();
+}
