@@ -303,3 +303,31 @@ static QPushButton* neonButton(const QString &text, const QColor &color) {
             .arg(color.name()));
     return btn;
 }
+
+static QSpinBox* neonSpin(int min, int max, int val) {
+    auto *s = new QSpinBox();
+    s->setRange(min, max);
+    s->setValue(val);
+    s->setFont(QFont("Courier New", 10));
+    s->setFixedHeight(28);
+    s->setStyleSheet(R"(
+        QSpinBox {
+            background: #080f1e;
+            color: #7fa8c9;
+            border: 1px solid #1a3050;
+            border-radius: 3px;
+            padding: 0 4px;
+        }
+        QSpinBox:focus { border-color: #00e5ff; color: #00e5ff; }
+        QSpinBox::up-button, QSpinBox::down-button {
+            background: #0d1526;
+            border: none;
+            width: 16px;
+        }
+    )");
+    return s;
+}
+
+SchedulerWidget::SchedulerWidget(QWidget *parent) : QWidget(parent) {
+    setupUI();
+}
