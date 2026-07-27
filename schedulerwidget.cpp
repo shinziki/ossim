@@ -379,4 +379,17 @@ void SchedulerWidget::setupUI() {
     ctrlLayout->addWidget(sectionTitle("TIME QUANTUM"));
     m_quantumSpin = neonSpin(1, 10, 2);
     ctrlLayout->addWidget(m_quantumSpin);
+
+    ctrlLayout->addWidget(hLine());
+
+    // Process builder
+    ctrlLayout->addWidget(sectionTitle("ADD PROCESS"));
+
+    auto makeRow = [&](const QString &lbl, QSpinBox *spin) {
+        auto *row = new QWidget();
+        auto *rl = new QHBoxLayout(row);
+        rl->setContentsMargins(0,0,0,0);
+        auto *label = new QLabel(lbl);
+        label->setFont(QFont("Courier New"));
+    }
 }
