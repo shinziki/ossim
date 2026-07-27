@@ -330,4 +330,14 @@ static QSpinBox* neonSpin(int min, int max, int val) {
 
 SchedulerWidget::SchedulerWidget(QWidget *parent) : QWidget(parent) {
     setupUI();
+    buildDefaultProcesses();
+
+    m_animTimer = new QTimer(this);
+    m_animTimer->setInterval(200);
+    connect(m_animTimer, &QTimer::timeout, this, &SchedulerWidget::onAnimationTick);
+}
+
+void SchedulerWidget::setupUI() {
+    auto *rootLayout = new QHBoxLayout(this);
+    rootLayout->setContentsMargins(0, 0);
 }
