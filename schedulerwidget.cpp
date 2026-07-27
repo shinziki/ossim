@@ -371,4 +371,12 @@ void SchedulerWidget::setupUI() {
             background: #0d1526; color: #7fa8c9; border: 1px solid #00e5ff30;
         }
     )");
+    connect(m_algorithmBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SchedulerWidget::onAlgorithmChanged);
+
+    ctrlLayout->addWidget(m_algorithmBox);
+
+    // Quantum
+    ctrlLayout->addWidget(sectionTitle("TIME QUANTUM"));
+    m_quantumSpin = neonSpin(1, 10, 2);
+    ctrlLayout->addWidget(m_quantumSpin);
 }
