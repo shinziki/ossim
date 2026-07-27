@@ -347,5 +347,28 @@ void SchedulerWidget::setupUI() {
     ctrlPanel->setFixedWidth(240);
     ctrlPanel->setStyleSheet("background: #080f1e; border-right: 1px solid #0d1e38;");
     auto *ctrlLayout = new QVBoxLayout(ctrlPanel);
-    ctrlLayout->setContentsMargins(14, 14, 14);
+    ctrlLayout->setContentsMargins(14, 14, 14, 14);
+    ctrlLayout->setSpacing(8);
+
+    // Algorithm
+    ctrlLayout->addWidget(sectionTitle("ALGORITHM"));
+    m_algorithmBox = new QComboBox();
+    m_algorithmBox->addItems({
+        "Round Robin",
+        "FCFS",
+        "SJF",
+        "Priority"
+    });
+    m_algorithmBox->setFont(QFont("Courier New", 9));
+    m_algorithmBox->setStyleSheet(R"(
+        QComboBox {
+            background: #080f1e; color: #00e5ff;
+            border: 1px solid #00e5ff50; border-radius: 3px;
+            padding: 4px 8px; font-family: 'Courier New'; font-size: 9px;
+        }
+        QComboBox::drop-down { border: none; }
+        QComboBox QAbstractItemView {
+            background: #0d1526; color: #7fa8c9; border: 1px solid #00e5ff30;
+        }
+    )");
 }
