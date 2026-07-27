@@ -339,5 +339,13 @@ SchedulerWidget::SchedulerWidget(QWidget *parent) : QWidget(parent) {
 
 void SchedulerWidget::setupUI() {
     auto *rootLayout = new QHBoxLayout(this);
-    rootLayout->setContentsMargins(0, 0);
+    rootLayout->setContentsMargins(0, 0, 0, 0);
+    rootLayout->setSpacing(0);
+
+    // Left control panel
+    auto *ctrlPanel = new QWidget();
+    ctrlPanel->setFixedWidth(240);
+    ctrlPanel->setStyleSheet("background: #080f1e; border-right: 1px solid #0d1e38;");
+    auto *ctrlLayout = new QVBoxLayout(ctrlPanel);
+    ctrlLayout->setContentsMargins(14, 14, 14);
 }
