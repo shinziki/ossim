@@ -390,6 +390,14 @@ void SchedulerWidget::setupUI() {
         auto *rl = new QHBoxLayout(row);
         rl->setContentsMargins(0,0,0,0);
         auto *label = new QLabel(lbl);
-        label->setFont(QFont("Courier New"));
-    }
+        label->setFont(QFont("Courier New", 8));
+        label->setStyleSheet("color: #4A6080;");
+        label->setFixedWidth(70);
+        rl->addWidget(label);
+        rl->addWidget(spin);
+        return row;
+    };
+
+    m_burstSpin = neonSpin(1, 20, 5);
+    m_arrivalSpin = neonSpin(0);
 }
