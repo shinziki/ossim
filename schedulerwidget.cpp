@@ -399,5 +399,9 @@ void SchedulerWidget::setupUI() {
     };
 
     m_burstSpin = neonSpin(1, 20, 5);
-    m_arrivalSpin = neonSpin(0);
+    m_arrivalSpin = neonSpin(0, 50, 0);
+    m_prioritySpin = neonSpin(1, 10, 5);
+    ctrlLayout->addWidget(makeRow("Burst Time", m_burstSpin));
+    ctrlLayout->addWidget(makeRow("Arrival", m_arrivalSpin));
+    ctrlLayout->addWidget(makeRow("Priority", m_burstSpin));
 }
