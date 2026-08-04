@@ -403,5 +403,11 @@ void SchedulerWidget::setupUI() {
     m_prioritySpin = neonSpin(1, 10, 5);
     ctrlLayout->addWidget(makeRow("Burst Time", m_burstSpin));
     ctrlLayout->addWidget(makeRow("Arrival", m_arrivalSpin));
-    ctrlLayout->addWidget(makeRow("Priority", m_burstSpin));
+    ctrlLayout->addWidget(makeRow("Priority", m_prioritySpin));
+
+    auto *addRemRow = new QWidget();
+    auto *addRemLay = new QHBoxLayout(addRemRow);
+    addRemLay->setContentsMargins(0,0,0,0);
+    m_addBtn = neonButton("+ ADD", QColor("#39ff14"));
+    m_removeBtn = neonButton("- DEL");
 }
